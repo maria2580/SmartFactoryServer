@@ -1,15 +1,9 @@
 package com.primitive.SmartFactoryServer.Controller;
 
-import com.primitive.rentable_DB_api.Data_object.Items_DAO;
-import com.primitive.rentable_DB_api.Data_object.User_DTO;
-import com.primitive.rentable_DB_api.Data_object.Users_DAO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 
 @RestController
 @RequestMapping("")
