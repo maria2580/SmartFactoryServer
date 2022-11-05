@@ -17,15 +17,13 @@ public class SensorValueDAO extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long index;
     @Column(length = 30,nullable = false)
-    String userIndex;
-    @Column(nullable = false)
-    String sensorName;
-    @Column(nullable = false)
-    String sensorValue;
+    Long userIndex;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    String sensorValues;
+
     @Builder
-    public SensorValueDAO(String userIndex, String sensorName, String sensorValue) {
+    public SensorValueDAO(Long userIndex,String sensorValues) {
         this.userIndex = userIndex;//새 값 추가할 때는 userID로 index 구해서 매개변수로 삽입하기.
-        this.sensorName=sensorName;
-        this.sensorValue = sensorValue;
+        this.sensorValues = sensorValues;
     }
 }
