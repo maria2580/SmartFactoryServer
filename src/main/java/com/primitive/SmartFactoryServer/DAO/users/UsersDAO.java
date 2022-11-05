@@ -17,14 +17,14 @@ public class UsersDAO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long index;
     @Column(nullable = false)
-    String id;
+    String userId;
     @Column(nullable = false)
     String pw;
     String factoryToken;
     String clientToken;
 
     public UsersDAO(String id, String PW) {
-        this.id = id;
+        this.userId = id;
         this.pw = PW;
     }
     public void new_user(String id, String pw){
