@@ -10,9 +10,12 @@ import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("")
-public class Controllers {
+public class Sensor_value_Controller {
+
     @Autowired
     UsersRepository usersRepository;
     @Autowired
@@ -34,27 +37,30 @@ public class Controllers {
         sensorValueRepository.save(sensorValue);
         return "";
     }
-    @PostMapping("login")
-    public String post_login_request(@RequestBody String ID, @RequestBody String PW){
 
-        return "";
+
+    @GetMapping("sensors/{ID}/resent_one")
+    public SensorValueDTO[] get_sensor_value_resent_one(@RequestParam String ID, @RequestBody String token){
+        ArrayList<SensorValueDTO> sensorValueses= new ArrayList<>();
+
+
+        return (SensorValueDTO[])sensorValueses.toArray();
+    }
+    @GetMapping("sensors/{ID}")
+    public SensorValueDTO[][] get_sensor_value_by_period(@RequestParam String ID, @RequestBody String token, @PathVariable String from, @PathVariable String to){
+        ArrayList<SensorValueDTO> sensorValues_one= new ArrayList<>();
+        ArrayList<SensorValueDTO[]> sensorValues_ten= new ArrayList<>();//이 어레이에 추가할 때는 one을 toArray()하여 add()호출
+
+
+        return (SensorValueDTO[][])sensorValues_ten.toArray();
+    }
+    @GetMapping ("sensors/{ID}/all")
+    public SensorValueDTO[][] get_sensor_value_all(@RequestParam String ID, @RequestBody String token){
+        ArrayList<SensorValueDTO> sensorValues_one= new ArrayList<>();
+        ArrayList<SensorValueDTO[]> sensorValues_ten= new ArrayList<>();//이 어레이에 추가할 때는 one을 toArray()하여 add()호출
+
+
+        return (SensorValueDTO[][])sensorValues_ten.toArray();
     }
 
-    @PostMapping("sign_up")
-    public String post_signUp_request(@RequestBody String ID, @RequestBody String PW){
-
-        return "";
-    }
-    @GetMapping("sensors/all")
-    public String get_sensor_value_all(){
-        return "";
-    }
-    @GetMapping("sensors/hour")
-    public String get_sensor_value_hour(){
-        return "";
-    }
-    @GetMapping ("sensors/resent_one")
-    public String get_sensor_value_resent_one(){
-        return "";
-    }
 }
