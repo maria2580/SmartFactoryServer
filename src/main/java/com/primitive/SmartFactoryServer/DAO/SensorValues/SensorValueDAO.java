@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
@@ -16,7 +13,7 @@ public class SensorValueDAO extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long index;
-    @Column(length = 30,nullable = false)
+    @Column(columnDefinition = "LONG",nullable = false)
     Long userIndex;
     @Column(columnDefinition = "TEXT", nullable = false)
     String sensorValues;
