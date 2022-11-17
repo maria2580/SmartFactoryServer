@@ -28,11 +28,11 @@ public class Sensor_value_Controller {
         String sensorValuesString = sensorValuesArr.toString();
 
         UsersDAO findedUser= usersRepository.findByUserId(ID).get(0);
-        Long userIndex = findedUser.getIndex();
+
 
         SensorValueDAO sensorValue= SensorValueDAO.builder()
                 .sensorValues(sensorValuesString)
-                .userIndex(userIndex)
+                .user(findedUser)
                 .build();
         sensorValueRepository.save(sensorValue);
         return "";
