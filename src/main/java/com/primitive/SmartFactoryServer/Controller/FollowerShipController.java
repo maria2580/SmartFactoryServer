@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("")
@@ -43,8 +42,7 @@ public class FollowerShipController {
     }
     @PatchMapping("followership")
     public String patch_follower(@RequestBody Long followerShipIndex,@RequestBody boolean enable){
-        Optional<FollowerShipDAO> followerShipDAOOptional = followerShipRepository.findById(followerShipIndex);
-        FollowerShipDAO followerShipDAO = new FollowerShipDAO();
+        FollowerShipDAO followerShipDAO = followerShipRepository.findById(followerShipIndex).get();
         if(enable){
             followerShipDAO.followAccept();
             followerShipRepository.save(followerShipDAO);
