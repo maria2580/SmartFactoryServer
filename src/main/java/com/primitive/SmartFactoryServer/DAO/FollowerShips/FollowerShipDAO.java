@@ -2,6 +2,7 @@ package com.primitive.SmartFactoryServer.DAO.FollowerShips;
 
 import com.primitive.SmartFactoryServer.DAO.BaseTimeEntity;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
@@ -12,18 +13,27 @@ import javax.persistence.GenerationType;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class FollowerShipDAO extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long index;
+    private Long index;
     @Column(columnDefinition = "LONG",nullable = false)
-    Long userIndex;
-    @Column(columnDefinition = "TEXT", nullable = false)
-    String sensorValues;
-
-    @Builder
-    public FollowerShipDAO(Long userIndex,String sensorValues) {
-        this.userIndex = userIndex;//새 값 추가할 때는 userID로 index 구해서 매개변수로 삽입하기.
-        this.sensorValues = sensorValues;
+    private Long followerUserIndex;
+    @Column(columnDefinition = "LONG", nullable = false)
+    private Long followUserIndex;
+    @Column(columnDefinition = "BOOLEAN", nullable = false)
+    private boolean enable=false;
+    public void followAccept(){
+        enable=true;
     }
-}
+
+    public void followDisable(){
+        enable=false;
+    }
+    @Builder
+    public FollowerShipDAO(Long followerUserIndex, Long followUserIndex) {
+        this.followerUserIndex = followerUserIndex;//새 값 추가할 때는 userID로 index 구해서 매개변수로 삽입하기.
+        this.followUserIndex = followUserIndex;
+
+    }}

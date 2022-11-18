@@ -1,6 +1,5 @@
 package com.primitive.SmartFactoryServer.Controller;
 
-import com.primitive.SmartFactoryServer.DB_Connection_Data;
 import org.springframework.web.bind.annotation.*;
 
 
