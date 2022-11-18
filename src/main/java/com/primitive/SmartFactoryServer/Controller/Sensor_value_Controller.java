@@ -49,10 +49,10 @@ public class Sensor_value_Controller {
     @GetMapping("sensors/{ID}")
     public SensorValueDTO[][] get_sensor_value_by_period(@RequestParam String ID, @RequestBody String token, @PathVariable String from, @PathVariable String to){
         ArrayList<SensorValueDTO> sensorValues_one= new ArrayList<>();
-        ArrayList<SensorValueDTO[]> sensorValues_ten= new ArrayList<>();//이 어레이에 추가할 때는 one을 toArray()하여 add()호출
+        ArrayList<SensorValueDTO[]> sensorValues_period = new ArrayList<>();//이 어레이에 추가할 때는 one을 toArray()하여 add()호출
 
 
-        return (SensorValueDTO[][])sensorValues_ten.toArray();
+        return (SensorValueDTO[][])sensorValues_period.toArray();
     }
     @GetMapping ("sensors/{ID}/all")
     public SensorValueDTO[][] get_sensor_value_all(@RequestParam String ID, @RequestBody String token){
