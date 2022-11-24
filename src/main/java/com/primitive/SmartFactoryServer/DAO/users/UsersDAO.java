@@ -27,18 +27,7 @@ public class UsersDAO {
         this.userId = id;
         this.pw = PW;
     }
-    public void new_user(String id, String pw){
 
-    }
-    public boolean loginCheck(String id, String pw){
-        return false;
-    }
-    public boolean isIdAvailable (String id){
-        return false;
-    }
-    public void change_id(String original_id,String new_id){
-
-    }
     public void updateFactoryToken(){
         
     }
