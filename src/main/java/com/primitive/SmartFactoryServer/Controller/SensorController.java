@@ -5,6 +5,7 @@ import com.primitive.SmartFactoryServer.DAO.Sensors.SensorRepository;
 import com.primitive.SmartFactoryServer.DAO.users.UsersDAO;
 import com.primitive.SmartFactoryServer.DAO.users.UsersRepository;
 import com.primitive.SmartFactoryServer.DTO.Sensor;
+import com.primitive.SmartFactoryServer.DTO.SensorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +19,12 @@ public class SensorController {
     @Autowired
     UsersRepository usersRepository;
    @PostMapping
-   public void post_new_sensor(@RequestBody Sensor sensor, @RequestBody String id){
-       UsersDAO usersDAO =usersRepository.findByUserId(id).get(0);
+   public void post_new_sensor(@RequestBody SensorDTO sensorDTO){
+       UsersDAO usersDAO =usersRepository.findByUserId(sensorDTO.getUser_id()).get(0);
        SensorDAO createdSensor = SensorDAO.builder()
                .userIndex(usersDAO.getIndex())
-               .name(sensor.getName())
-               .command(sensor.getCommand())
+               .name(sensorDTO.getName())
+               .command(sensorDTO.getCommand())
                .build();
        sensorRepository.save(createdSensor);
    }
