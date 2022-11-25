@@ -5,9 +5,9 @@ import com.primitive.SmartFactoryServer.DAO.SensorValues.SensorValueRepository;
 import com.primitive.SmartFactoryServer.DAO.users.UsersDAO;
 import com.primitive.SmartFactoryServer.DAO.users.UsersRepository;
 import com.primitive.SmartFactoryServer.DTO.SensorValue;
+import com.primitive.SmartFactoryServer.DTO.SensorValueDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +23,13 @@ public class Sensor_value_Controller {
     @Autowired
     SensorValueRepository sensorValueRepository;
     @PostMapping("sensors_value")
-    public String post_sensor_value(@RequestBody SensorValue[] sensorValues, @RequestBody String ID, @RequestBody String loginToken){
+    public String post_sensor_value(@RequestBody SensorValueDTO sensorValueDTO){
         JSONObject jsonObject = new JSONObject();
         JSONArray sensorValuesArr = new JSONArray();
-        sensorValuesArr.put(sensorValues[0]);
+        sensorValuesArr.put(sensorValueDTO.getSensorValues()[0]);
         String sensorValuesString = sensorValuesArr.toString();
 
-        UsersDAO findedUser= usersRepository.findByUserId(ID).get(0);
+        UsersDAO findedUser= usersRepository.findByUserId(sensorValueDTO.getID()).get(0);
 
 
         SensorValueDAO sensorValue= SensorValueDAO.builder()
@@ -42,14 +42,17 @@ public class Sensor_value_Controller {
 
 
     @GetMapping("sensors_value/{ID}/resent_one")
-    public SensorValue[] get_sensor_value_resent_one(@PathVariable("ID") String ID, @RequestBody String token) throws JSONException {
+    public SensorValue[] get_sensor_value_resent_one(@PathVariable("ID") String ID, @RequestBody String token) {
         ArrayList<SensorValue> sensorValues= new ArrayList<>();
         List<SensorValueDAO> sensorValueDTOList= sensorValueRepository.findAllByUser(usersRepository.findByUserId(ID).get(0));
+        JSONArray jsonArray = new JSONArray();
+        try {
+            jsonArray= new JSONArray(sensorValueDTOList.get(sensorValueDTOList.size()-1).getSensorValues());
+            for(int i=0;i<sensorValueDTOList.size();i++){
+                sensorValues.add((SensorValue)jsonArray.get(i));
+            }
+        }catch (Exception e){e.printStackTrace();}
 
-        JSONArray jsonArray= new JSONArray(sensorValueDTOList.get(sensorValueDTOList.size()-1).getSensorValues());
-        for(int i=0;i<sensorValueDTOList.size();i++){
-            sensorValues.add((SensorValue)jsonArray.get(i));
-        }
 
         return (SensorValue[])sensorValues.toArray();
     }
@@ -68,7 +71,7 @@ public class Sensor_value_Controller {
                     result.get(i).add((SensorValue)jsonArray[i].get(j));
                 }
             }
-        }catch (JSONException e){e.printStackTrace();}
+        }catch (Exception e){e.printStackTrace();}
         ;//안드로이드에서 날짜 받아오는 함수 사용할 예정
 
         ArrayList<ArrayList<SensorValue>> finedResult=new ArrayList<>();
@@ -99,7 +102,7 @@ public class Sensor_value_Controller {
                     result.get(i).add((SensorValue)jsonArray[i].get(j));
                 }
             }
-        }catch (JSONException e){e.printStackTrace();}
+        }catch (Exception e){e.printStackTrace();}
 
         return (SensorValue[][])result.toArray();
     }
