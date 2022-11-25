@@ -21,11 +21,11 @@ public class Alarm_Controller {
     @Autowired
     AlarmRepository alarmRepository;
     @PostMapping("alarm")//알람 항목추가
-    public String post_alarm(@RequestBody String myID,@RequestBody Long sensorIndex,  @RequestBody double from, @RequestBody double to){
+    public String post_alarm(@RequestBody String myID,@RequestBody Long sensorIndex,  @RequestBody double minimum, @RequestBody double maximum){
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
         SensorDAO sensorDAO = sensorRepository.findById(sensorIndex).get();
-        AlarmDAO alarmDAO = new AlarmDAO(usersDAO, sensorDAO,from, to);
+        AlarmDAO alarmDAO = new AlarmDAO(usersDAO, sensorDAO,minimum, maximum);
         return "";
     }
 
@@ -38,10 +38,10 @@ public class Alarm_Controller {
     }
 
     @PatchMapping("alarm")//센서 알람 기준치 설정
-    public String patch_from_alarm(@RequestBody Long alarmIndex, @RequestBody double from, @RequestBody double to){
+    public String patch_from_alarm(@RequestBody Long alarmIndex, @RequestBody double minimum, @RequestBody double maximum){
         AlarmDAO alarmDAO = alarmRepository.findById(alarmIndex).get();
-        alarmDAO.updateMinimum(from);
-        alarmDAO.updateMaximum(to);
+        alarmDAO.updateMinimum(minimum);
+        alarmDAO.updateMaximum(maximum);
 
         alarmRepository.save(alarmDAO);
 
