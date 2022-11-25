@@ -5,13 +5,13 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class SensorValueDTO {
+public class SensorValue {
     private String sensorName;
     private String sensorValue;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public SensorValueDTO(String sensorName, String sensorValue, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public SensorValue(String sensorName, String sensorValue, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.sensorName = sensorName;
         this.sensorValue = sensorValue;
         this.createdDate = createdDate;
