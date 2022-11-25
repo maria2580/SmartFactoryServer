@@ -2,10 +2,11 @@ package com.primitive.SmartFactoryServer.DTO;
 
 import com.primitive.SmartFactoryServer.DAO.BaseTimeEntity;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-
+@Getter
 public class AlarmDTO extends BaseTimeEntity {
 
     Long index; // 알람 구분 인덱스
