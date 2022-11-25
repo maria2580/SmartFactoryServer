@@ -4,6 +4,8 @@ package com.primitive.SmartFactoryServer.Controller;
 import com.primitive.SmartFactoryServer.DAO.SensorValues.SensorValueRepository;
 import com.primitive.SmartFactoryServer.DAO.users.UsersDAO;
 import com.primitive.SmartFactoryServer.DAO.users.UsersRepository;
+import com.primitive.SmartFactoryServer.VO.LoginVO;
+import com.primitive.SmartFactoryServer.VO.SignUpVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +22,8 @@ public class Login_Controller {
 
 
     @PostMapping("sign_up")
-    public String post_signUp_request(@RequestBody String ID, @RequestBody String PW){
-        List<UsersDAO> usersDAOList = usersRepository.findByUserId(ID);
+    public String post_signUp_request(@RequestBody SignUpVO idpw){
+        List<UsersDAO> usersDAOList = usersRepository.findByUserId(idpw.ID);
         boolean flag=false;
         for(int i=0;i<usersDAOList.size();i++){
             flag= true;
@@ -30,27 +32,26 @@ public class Login_Controller {
             return LoginStatus.EXIST_ID+"";
         }
         else {
-            UsersDAO usersDAO=new UsersDAO(ID,PW);
+            UsersDAO usersDAO=new UsersDAO(idpw.ID, idpw.PW);
             usersRepository.save(usersDAO);
         }
-
         return LoginStatus.PERMITTED+"";
     }
 
     @PostMapping("login")
-    public String login_request(@RequestBody String ID, @RequestBody String PW, @RequestParam int env) {
-        List<UsersDAO> usersDAOList = usersRepository.findByUserId(ID);
+    public String login_request(@RequestBody LoginVO idpw) {
+        List<UsersDAO> usersDAOList = usersRepository.findByUserId(idpw.ID);
         boolean flag=false;
         for(int i=0;i<usersDAOList.size();i++){
             flag=true;
-        }//flag가 true라면 존재하는 유저
-        if(flag&&usersDAOList.get(0).getPw().equals(PW)){
-            if(env==Env.FACTORY){
-                usersDAOList.get(0).updateFactoryToken();
+        }//flag가 true라면 존재하는 유저1
+        if(flag&&usersDAOList.get(0).getPw().equals(idpw.PW)){
+            if(idpw.env==Env.FACTORY){
+                usersDAOList.get(0).updateFactoryToken(LoginStatus.PERMITTED+"");
                 return LoginStatus.PERMITTED+"";
 
-            } else if (env==Env.CLIENT) {
-                usersDAOList.get(0).updateClientToken();
+            } else if (idpw.env==Env.CLIENT) {
+                usersDAOList.get(0).updateClientToken(LoginStatus.PERMITTED+"");
                 return LoginStatus.PERMITTED+"";
             }
             else {
