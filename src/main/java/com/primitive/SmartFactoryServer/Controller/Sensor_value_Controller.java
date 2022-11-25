@@ -42,7 +42,7 @@ public class Sensor_value_Controller {
 
 
     @GetMapping("sensors_value/{ID}/resent_one")
-    public SensorValueDTO[] get_sensor_value_resent_one(@RequestParam String ID, @RequestBody String token) throws JSONException {
+    public SensorValueDTO[] get_sensor_value_resent_one(@PathVariable("ID") String ID, @RequestBody String token) throws JSONException {
         ArrayList<SensorValueDTO> sensorValues= new ArrayList<>();
         List<SensorValueDAO> sensorValueDTOList= sensorValueRepository.findAllByUser(usersRepository.findByUserId(ID).get(0));
 
