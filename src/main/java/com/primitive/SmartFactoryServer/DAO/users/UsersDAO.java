@@ -2,18 +2,15 @@ package com.primitive.SmartFactoryServer.DAO.users;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Getter
 @Entity
 @NoArgsConstructor
 public class UsersDAO {
     @Id
+    @JoinColumn(name = "user_index")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long index;
     @Column(nullable = false)
@@ -28,16 +25,16 @@ public class UsersDAO {
         this.pw = PW;
     }
 
-    public void updateFactoryToken(){
-        
+    public void updateFactoryToken(String factoryToken){
+        this.factoryToken=factoryToken;
     }
-    public void updateClientToken(){
-
+    public void updateClientToken(String clientToken){
+        this.clientToken=clientToken;
     }
     public boolean clientTokenCheck(String clientToken){
         return this.clientToken.equals(clientToken);
     }
-    public boolean factoryTokenCheck(String FactoryToken){
+    public boolean factoryTokenCheck(String factoryToken){
         return this.factoryToken.equals(factoryToken);
     }
 }

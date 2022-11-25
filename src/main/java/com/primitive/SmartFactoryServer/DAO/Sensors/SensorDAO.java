@@ -1,30 +1,29 @@
 package com.primitive.SmartFactoryServer.DAO.Sensors;
 
-import com.primitive.SmartFactoryServer.DTO.SensorDTO;
+import com.primitive.SmartFactoryServer.DTO.Sensor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class SensorDAO {
     @Id
+    @JoinColumn(name = "sensor_index")//외래키 이름 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long index;
+    private Long index;
     @Column(nullable = false)
-    Long userIndex;
+    private Long userIndex;
     @Column(nullable = false)
-    String name;
+    private String name;
     @Column(nullable = false)
-    String command;
-    public void change(SensorDTO sensorDTO){
-        this.name=sensorDTO.getName();
-        this.command=sensorDTO.getCommand();
+    private String command;
+    public void change(Sensor sensor){
+        this.name= sensor.getName();
+        this.command= sensor.getCommand();
     }
     @Builder
     public SensorDAO(Long userIndex,String name, String command) {

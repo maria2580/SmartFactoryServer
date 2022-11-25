@@ -3,21 +3,25 @@ package com.primitive.SmartFactoryServer.DAO.SensorValues;
 import com.primitive.SmartFactoryServer.DAO.BaseTimeEntity;
 import com.primitive.SmartFactoryServer.DAO.users.UsersDAO;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import javax.persistence.Id;
+
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class SensorValueDAO extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long index;
-    @Column(columnDefinition = "LONG",nullable = false)
-    UsersDAO user;
+    private Long index;
+    @ManyToOne(fetch = FetchType.LAZY) // 1
+    @JoinColumn(name = "user_index")//외래키 이름 지정
+    private UsersDAO user;
     @Column(columnDefinition = "TEXT", nullable = false)
-    String sensorValues;
+    private String sensorValues;
 
     @Builder
     public SensorValueDAO(UsersDAO user,String sensorValues) {
