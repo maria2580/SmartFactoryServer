@@ -4,43 +4,43 @@ import com.primitive.SmartFactoryServer.DAO.BaseTimeEntity;
 import com.primitive.SmartFactoryServer.DAO.Sensors.SensorDAO;
 import com.primitive.SmartFactoryServer.DAO.users.UsersDAO;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class AlarmDAO extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long index; // 알람 구분 인덱스
-    @Column(columnDefinition = "LONG",nullable = false)
-    UsersDAO user;
-    @Column(columnDefinition = "LONG",nullable = false)
-    SensorDAO sensorIndex; // 센서 고유 인덱스
+    private Long index; // 알람 구분 인덱스
+    @ManyToOne(fetch = FetchType.LAZY) // 1
+    @JoinColumn(name = "user_index")//외래키 이름 지정
+    private UsersDAO userIndex;
+    @ManyToOne(fetch = FetchType.LAZY) // 1
+    @JoinColumn(name = "sensor_index")//외래키 이름 지정
+    private SensorDAO sensorIndex; // 센서 고유 인덱스
     // on/off알람일경우 ?
-    @Column(columnDefinition = "TEXT", nullable = false)
-    double from; // 알람 최저 기준치
-    @Column(columnDefinition = "TEXT", nullable = false)
-    double to; // 알람 최고 기준치
+    @Column(columnDefinition = "DOUBLE", nullable = false)
+    private double minimum; // 알람 최저 기준치
+    @Column(columnDefinition = "DOUBLE", nullable = false)
+    private double maximum; // 알람 최고 기준치
 
-    public void updateFrom(Double from){
-        this.from = from;
+    public void updateMinimum(Double minimum){
+        this.minimum = minimum;
     }
-    public void updateTo(Double to){
-        this.to = to;
+    public void updateMaximum(Double maximum){
+        this.maximum = maximum;
     }
 
     @Builder
-    public AlarmDAO(UsersDAO usersDAO,SensorDAO sensorIndex ,double from, double to) {
-        this.user = usersDAO;//새 값 추가할 때는 userID로 index 구해서 매개변수로 삽입하기.
+    public AlarmDAO(UsersDAO usersDAO, SensorDAO sensorIndex , double minimum, double maximum) {
+        this.userIndex = usersDAO;//새 값 추가할 때는 userID로 index 구해서 매개변수로 삽입하기.
         this.sensorIndex = sensorIndex;
-        this.from = from;
-        this.to = to;
+        this.minimum = minimum;
+        this.maximum = maximum;
 
         //Todo 센서 값은 RTDB에, 센서 명령어를 DB에 저장하여 참조 가능하도록 변경
     }

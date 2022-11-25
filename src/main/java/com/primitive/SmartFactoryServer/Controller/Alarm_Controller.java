@@ -33,15 +33,15 @@ public class Alarm_Controller {
     public List<AlarmDAO> get_alarm(@RequestBody String myID){
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
-        List<AlarmDAO> alarmDAOS = alarmRepository.findAllByAlarmIndex(usersDAO.getIndex());
+        List<AlarmDAO> alarmDAOS = alarmRepository.findAllByUserIndex(usersDAO.getIndex());
         return alarmDAOS;
     }
 
     @PatchMapping("alarm")//센서 알람 기준치 설정
     public String patch_from_alarm(@RequestBody Long alarmIndex, @RequestBody double from, @RequestBody double to){
         AlarmDAO alarmDAO = alarmRepository.findById(alarmIndex).get();
-        alarmDAO.updateFrom(from);
-        alarmDAO.updateTo(to);
+        alarmDAO.updateMinimum(from);
+        alarmDAO.updateMaximum(to);
 
         alarmRepository.save(alarmDAO);
 

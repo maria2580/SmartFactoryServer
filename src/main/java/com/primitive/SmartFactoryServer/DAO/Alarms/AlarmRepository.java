@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface AlarmRepository extends JpaRepository<AlarmDAO,Long> {
-    List<AlarmDAO> findAllByAlarmIndex(Long userIndex);
+    List<AlarmDAO> findAllByUserIndex(Long userIndex);
 }
