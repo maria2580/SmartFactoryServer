@@ -6,6 +6,7 @@ import com.primitive.SmartFactoryServer.DAO.Sensors.SensorDAO;
 import com.primitive.SmartFactoryServer.DAO.Sensors.SensorRepository;
 import com.primitive.SmartFactoryServer.DAO.users.UsersDAO;
 import com.primitive.SmartFactoryServer.DAO.users.UsersRepository;
+import com.primitive.SmartFactoryServer.DTO.AlarmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,17 +21,17 @@ public class Alarm_Controller {
     SensorRepository sensorRepository;
     @Autowired
     AlarmRepository alarmRepository;
-    @PostMapping("alarm")//알람 항목추가
-    public String post_alarm(@RequestBody String myID,@RequestBody Long sensorIndex,  @RequestBody double minimum, @RequestBody double maximum){
+    @PostMapping("alarm/{ID}")//알람 항목추가
+    public String post_alarm(@PathVariable("ID") String myID, @RequestBody AlarmDTO alarmDTO){
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
-        SensorDAO sensorDAO = sensorRepository.findById(sensorIndex).get();
-        AlarmDAO alarmDAO = new AlarmDAO(usersDAO, sensorDAO,minimum, maximum);
+        SensorDAO sensorDAO = sensorRepository.findById(alarmDTO.getSensorIndex()).get();
+        AlarmDAO alarmDAO = new AlarmDAO(usersDAO, sensorDAO,alarmDTO.getMinimum(), alarmDTO.getMaximum());
         return "";
     }
 
-    @GetMapping("alarm")//알람리스트 호출
-    public List<AlarmDAO> get_alarm(@RequestBody String myID){
+    @GetMapping("alarm/{ID}")//알람리스트 호출
+    public List<AlarmDAO> get_alarm(@PathVariable("ID")String myID){
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
         List<AlarmDAO> alarmDAOS = alarmRepository.findAllByUserIndex(usersDAO.getIndex());
@@ -38,10 +39,10 @@ public class Alarm_Controller {
     }
 
     @PatchMapping("alarm")//센서 알람 기준치 설정
-    public String patch_from_alarm(@RequestBody Long alarmIndex, @RequestBody double minimum, @RequestBody double maximum){
-        AlarmDAO alarmDAO = alarmRepository.findById(alarmIndex).get();
-        alarmDAO.updateMinimum(minimum);
-        alarmDAO.updateMaximum(maximum);
+    public String patch_from_alarm(@RequestBody AlarmDTO alarmDTO){
+        AlarmDAO alarmDAO = alarmRepository.findById(alarmDTO.getIndex()).get();
+        alarmDAO.updateMinimum(alarmDTO.getMinimum());
+        alarmDAO.updateMaximum(alarmDTO.getMaximum());
 
         alarmRepository.save(alarmDAO);
 
