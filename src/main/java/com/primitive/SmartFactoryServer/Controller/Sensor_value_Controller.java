@@ -85,7 +85,7 @@ public class Sensor_value_Controller {
         return (SensorValueDTO[][])finedResult.toArray();
     }
     @GetMapping ("sensors_value/{ID}/all")
-    public SensorValueDTO[][] get_sensor_value_all(@RequestParam String ID, @RequestBody String token)  {
+    public SensorValueDTO[][] get_sensor_value_all(@PathVariable("ID") String ID, @RequestBody String token)  {
         ArrayList<ArrayList<SensorValueDTO>> result=new ArrayList<>();
         List<SensorValueDAO> sensorValueDTOList= sensorValueRepository.findAllByUser(usersRepository.findByUserId(ID).get(0));
         JSONArray[] jsonArray=new JSONArray[sensorValueDTOList.size()];
