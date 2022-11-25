@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 @Getter
 public class AlarmDTO extends BaseTimeEntity {
 
-    Long index; // 알람 구분 인덱스
-    Long sensorIndex; // 센서 고유 인덱스
+    private Long index; // 알람 구분 인덱스
+    private  Long sensorIndex; // 센서 고유 인덱스
     // on/off알람일경우 ?
-    double minimum; // 알람 최저 기준치
-    double maximum; // 알람 최고 기준치
+    private double minimum; // 알람 최저 기준치
+    private double maximum; // 알람 최고 기준치
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 

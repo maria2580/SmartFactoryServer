@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 
 @Getter
 public class SensorValueDTO {
-    String sensorName;
-    String sensorValue;
+    private String sensorName;
+    private String sensorValue;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
