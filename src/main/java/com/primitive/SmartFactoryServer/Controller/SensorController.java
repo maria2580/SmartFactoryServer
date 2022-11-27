@@ -12,36 +12,40 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("sensors")
 public class SensorController {
     @Autowired
     SensorRepository sensorRepository;
     @Autowired
     UsersRepository usersRepository;
-   @PostMapping
+   @PostMapping("sensors")
    public void post_new_sensor(@RequestBody SensorDTO sensorDTO){
        UsersDAO usersDAO =usersRepository.findByUserId(sensorDTO.getUser_id()).get(0);
+       System.out.println("sensorDTO값 도착확인: 센서명: "+sensorDTO.getName()+" command: "+sensorDTO.getCommand()+"  userid: "+sensorDTO.getUser_id());
+
        SensorDAO createdSensor = SensorDAO.builder()
-               .userIndex(usersDAO.getIndex())
+               .user(usersDAO)
                .name(sensorDTO.getName())
                .command(sensorDTO.getCommand())
                .build();
        sensorRepository.save(createdSensor);
+       System.out.println("sensor값 도착확인: 센서명: "+createdSensor.getName()+" command: "+createdSensor.getCommand()+"  index: "+createdSensor.getIndex());
    }
-   @GetMapping
-   public List<SensorDAO> get_all_sensor(@RequestBody String id){
+   @GetMapping("sensors/{ID}")
+   public List<SensorDAO> get_all_sensor(@PathVariable("ID") String id){
+       System.out.println("받은값 "+id);
+       System.out.println("받은값 "+id);
        UsersDAO usersDAO =usersRepository.findByUserId(id).get(0);
-       List<SensorDAO> sensorDAOs= sensorRepository.findAllByUserIndex(usersDAO.getIndex());
+       List<SensorDAO> sensorDAOs= sensorRepository.findByUser(usersDAO);
        return sensorDAOs;
    }
-   @PatchMapping
+   @PatchMapping("sensors")
    public void update_sensor(@RequestBody Sensor sensor){
        SensorDAO sensorDAO = sensorRepository.findById(sensor.getIndex()).get();
        sensorDAO.change(sensor);
        sensorRepository.save(sensorDAO);
    }
-   @DeleteMapping
-   public void delete_sensor(@RequestBody long index){
+   @DeleteMapping("sensors/{index}")
+   public void delete_sensor(@PathVariable("index") long index){
        SensorDAO sensorDAO = sensorRepository.findById(index).get();
        sensorRepository.delete(sensorDAO);
 

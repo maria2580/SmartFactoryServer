@@ -7,15 +7,15 @@ import com.primitive.SmartFactoryServer.DAO.users.UsersRepository;
 import com.primitive.SmartFactoryServer.DTO.SensorValue;
 import com.primitive.SmartFactoryServer.DTO.SensorValueDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
-@RequestMapping("")
+@RequestMapping
 public class Sensor_value_Controller {
 
     @Autowired
@@ -24,92 +24,100 @@ public class Sensor_value_Controller {
     SensorValueRepository sensorValueRepository;
     @PostMapping("sensors_value")
     public String post_sensor_value(@RequestBody SensorValueDTO sensorValueDTO){
-        JSONObject jsonObject = new JSONObject();
-        JSONArray sensorValuesArr = new JSONArray();
-        sensorValuesArr.put(sensorValueDTO.getSensorValues()[0]);
-        String sensorValuesString = sensorValuesArr.toString();
+        String sensorValuesString="";
 
+        for(int i = 0 ; i< sensorValueDTO.getSensorValues().length;i++){
+            System.out.println("받은 값:"+sensorValueDTO.getSensorValues()[i]);
+        }
         UsersDAO findedUser= usersRepository.findByUserId(sensorValueDTO.getID()).get(0);
-
-
-        SensorValueDAO sensorValue= SensorValueDAO.builder()
-                .sensorValues(sensorValuesString)
-                .user(findedUser)
-                .build();
+        SensorValueDAO sensorValue= new SensorValueDAO(findedUser,sensorValueDTO.valueToString());
         sensorValueRepository.save(sensorValue);
         return "";
     }
 
 
     @GetMapping("sensors_value/{ID}/resent_one")
-    public SensorValue[] get_sensor_value_resent_one(@PathVariable("ID") String ID, @RequestBody String token) {
-        ArrayList<SensorValue> sensorValues= new ArrayList<>();
-        List<SensorValueDAO> sensorValueDTOList= sensorValueRepository.findAllByUser(usersRepository.findByUserId(ID).get(0));
-        JSONArray jsonArray = new JSONArray();
+    public SensorValue[] get_sensor_value_resent_one(@PathVariable("ID") String ID) {
+        List<SensorValueDAO> sensorValueDAOList= sensorValueRepository.findByUser(usersRepository.findByUserId(ID).get(0));
+        int lastIndex=sensorValueDAOList.size()-1;
+        SensorValue[] result = new SensorValue[0];
+        JSONArray jsonArrays=new JSONArray();
         try {
-            jsonArray= new JSONArray(sensorValueDTOList.get(sensorValueDTOList.size()-1).getSensorValues());
-            for(int i=0;i<sensorValueDTOList.size();i++){
-                sensorValues.add((SensorValue)jsonArray.get(i));
+            jsonArrays=new JSONArray(sensorValueDAOList.get(lastIndex).getSensorValues());
+            result=new SensorValue[jsonArrays.length()];
+            for(int i=0;i<jsonArrays.length();i++){
+                JSONObject jsonObject= new JSONObject(jsonArrays.get(i).toString());
+                result[i]=new SensorValue(jsonObject.getString("name"), jsonObject.getString("value")) ;
             }
         }catch (Exception e){e.printStackTrace();}
 
-
-        return (SensorValue[])sensorValues.toArray();
+        return result;
     }
     @GetMapping("sensors_value/{ID}")
-    public SensorValue[][] get_sensor_value_by_period(@PathVariable("ID") String ID, @RequestBody String token, @RequestParam("from") String from, @RequestParam("to") String to){
-        ArrayList<ArrayList<SensorValue>> result=new ArrayList<>();
-        List<SensorValueDAO> sensorValueDTOList= sensorValueRepository.findAllByUser(usersRepository.findByUserId(ID).get(0));
-        JSONArray[] jsonArray=new JSONArray[sensorValueDTOList.size()];
+    public SensorValue[][] get_sensor_value_by_period(@PathVariable("ID") String ID, @RequestParam("from") String from, @RequestParam("to") String to){
+        List<SensorValueDAO> sensorValueDAOList= sensorValueRepository.findByUser(usersRepository.findByUserId(ID).get(0));
+        SensorValue[][] result=new SensorValue[sensorValueDAOList.size()][];
+        JSONArray[] jsonArrays=new JSONArray[sensorValueDAOList.size()];
         try {
-            for(int i=0;i<sensorValueDTOList.size();i++){
-                jsonArray[i]= new JSONArray(sensorValueDTOList.get(i).getSensorValues());
-            }
-            for (int i=0;i<jsonArray.length;i++){
-                //i=0에 같은 시점 센서값 n개 만큼 반복
-                for(int j=0; j<jsonArray[i].length();j++){
-                    result.get(i).add((SensorValue)jsonArray[i].get(j));
+            for(int i=0;i<sensorValueDAOList.size();i++){
+                jsonArrays[i]= new JSONArray(sensorValueDAOList.get(i).getSensorValues());
+                result[i]=new SensorValue[jsonArrays[i].length()];
+                for (int j = 0 ; j < jsonArrays[i].length();j++){
+                    JSONObject jsonObject= new JSONObject(jsonArrays[i].get(j).toString());
+                    result[i][j]=new SensorValue(jsonObject.getString("name"), jsonObject.getString("value")) ;
                 }
             }
         }catch (Exception e){e.printStackTrace();}
-        ;//안드로이드에서 날짜 받아오는 함수 사용할 예정
 
-        ArrayList<ArrayList<SensorValue>> finedResult=new ArrayList<>();
-        Calendar min=getCaleder(from);
-        Calendar max=getCaleder(to);
-        for(int i=0; i<result.size();i++) {
-            LocalDateTime time = result.get(i).get(0).getCreatedDate();
-            Calendar temp = new GregorianCalendar();
-            temp.set(time.getYear(), time.getMonthValue(), time.getDayOfMonth());
+        Calendar min=getCalender(from);
+        Calendar max=getCalender(to);
+
+        ArrayList<SensorValue[]> finedResult=new ArrayList<>();
+        for(int i=0; i<sensorValueDAOList.size();i++) {
+            LocalDateTime time = sensorValueDAOList.get(i).getCreatedDate();
+            Calendar temp=new GregorianCalendar(time.getYear(),time.getMonthValue(),time.getDayOfMonth(),time.getHour(),time.getMinute(),time.getSecond());
             if (temp.after(min) & temp.before(max)) {
-                finedResult.add(result.get(i));
+                finedResult.add(result[i]);
             }
         }
-        return (SensorValue[][])finedResult.toArray();
+        SensorValue[][] sensorValues = new SensorValue[finedResult.size()][];
+        for(int i=0;i< finedResult.size();i++){
+            jsonArrays[i]= new JSONArray(finedResult.get(i));
+            sensorValues[i]=new SensorValue[finedResult.get(i).length];
+            for (int j = 0 ; j < finedResult.get(i).length;j++){
+                JSONObject jsonObject= new JSONObject(jsonArrays[i].get(j).toString());
+                sensorValues[i][j]=new SensorValue(jsonObject.getString("name"), jsonObject.getString("value")) ;
+            }
+
+        }
+        return sensorValues;
     }
     @GetMapping ("sensors_value/{ID}/all")
-    public SensorValue[][] get_sensor_value_all(@PathVariable("ID") String ID, @RequestBody String token)  {
-        ArrayList<ArrayList<SensorValue>> result=new ArrayList<>();
-        List<SensorValueDAO> sensorValueDTOList= sensorValueRepository.findAllByUser(usersRepository.findByUserId(ID).get(0));
-        JSONArray[] jsonArray=new JSONArray[sensorValueDTOList.size()];
+    public SensorValue[][] get_sensor_value_all(@PathVariable("ID") String ID)  {
+        List<SensorValueDAO> sensorValueDAOList= sensorValueRepository.findByUser(usersRepository.findByUserId(ID).get(0));
+        SensorValue[][] result=new SensorValue[sensorValueDAOList.size()][];
+        JSONArray[] jsonArrays=new JSONArray[sensorValueDAOList.size()];
         try {
-            for(int i=0;i<sensorValueDTOList.size();i++){
-                jsonArray[i]= new JSONArray(sensorValueDTOList.get(i).getSensorValues());
-            }
-            for (int i=0;i<jsonArray.length;i++){
-                //i=0에 같은 시점 센서값 n개 만큼 반복
-                for(int j=0; j<jsonArray[i].length();j++){
-                    result.get(i).add((SensorValue)jsonArray[i].get(j));
+            for(int i=0;i<sensorValueDAOList.size();i++){
+                jsonArrays[i]= new JSONArray(sensorValueDAOList.get(i).getSensorValues());
+                result[i]=new SensorValue[jsonArrays[i].length()];
+                for (int j = 0 ; j < jsonArrays[i].length();j++){
+                    JSONObject jsonObject= new JSONObject(jsonArrays[i].get(j).toString());
+                    result[i][j]=new SensorValue(jsonObject.getString("name"), jsonObject.getString("value")) ;
                 }
             }
         }catch (Exception e){e.printStackTrace();}
 
-        return (SensorValue[][])result.toArray();
+        return result;
     }
-    static Calendar getCaleder(String yyyymmdd){
-        int Year=Integer.parseInt(yyyymmdd)/10000;
-        int Month=Integer.parseInt(yyyymmdd)%(Year*10000);
-        int Day=Integer.parseInt(yyyymmdd)%(Year*10000+Month*100);
-        return new GregorianCalendar(Year,Month,Day);
+    static Calendar getCalender(String yyyymmddhhmmss){
+        long temp = Long.parseLong(yyyymmddhhmmss);
+        int Year=(int) (temp/10000000000L);
+        int Month=(int) (temp%(Year*10000000000L))/100000000;
+        int Day=(int) (temp%(Year*10000000000L+Month*100000000))/1000000;
+        int hrs=(int) (temp%(Year*10000000000L+Month*100000000+Day*1000000))/10000;
+        int min=(int) (temp%(Year*10000000000L+Month*100000000+Day*1000000+hrs*10000))/100;
+        int sec=(int) (temp%(Year*10000000000L+Month*100000000+Day*1000000+hrs*10000+min*100));
+        return new GregorianCalendar(Year,Month,Day,hrs,min,sec);
     }
 }

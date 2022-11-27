@@ -2,20 +2,23 @@ package com.primitive.SmartFactoryServer.DTO;
 
 
 import lombok.Getter;
-import java.time.LocalDateTime;
+
+import java.io.Serializable;
 
 @Getter
-public class SensorValue {
-    private String sensorName;
-    private String sensorValue;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+public class SensorValue implements Serializable {
+    private String name;
+    private String value;
 
-    public SensorValue(String sensorName, String sensorValue, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.sensorName = sensorName;
-        this.sensorValue = sensorValue;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+    public SensorValue(String name, String value) {
+        this.name = name;
+        this.value = value;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "\"name\":" +"\""+ name + "\","+"\"value\":" +"\""+ value + "\"" +
+                '}';
+    }
 }

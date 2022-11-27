@@ -34,7 +34,7 @@ public class Alarm_Controller {
     public List<AlarmDAO> get_alarm(@PathVariable("ID")String myID){
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
-        List<AlarmDAO> alarmDAOS = alarmRepository.findAllByUserIndex(usersDAO.getIndex());
+        List<AlarmDAO> alarmDAOS = alarmRepository.findByUser(usersDAO);
         return alarmDAOS;
     }
 
@@ -49,8 +49,8 @@ public class Alarm_Controller {
         return "";
     }
 
-    @DeleteMapping("alarm")//알람 항목 삭제
-    public String delete_alarm(@RequestBody Long alarmIndex){
+    @DeleteMapping("alarm/{index}")//알람 항목 삭제
+    public String delete_alarm(@PathVariable("index") Long alarmIndex){
         SensorDAO sensorDAO = sensorRepository.findById(alarmIndex).get();
         sensorRepository.delete(sensorDAO);
 

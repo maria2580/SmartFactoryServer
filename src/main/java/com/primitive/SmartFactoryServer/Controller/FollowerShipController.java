@@ -25,17 +25,27 @@ public class FollowerShipController {
         UsersDAO followerUser = usersRepository.findByUserId(followshipVO.getMyID()).get(0);
         UsersDAO followUser = usersRepository.findByUserId(followshipVO.getTargetID()).get(0);
 
-        FollowerShipDAO followerShipDAO = new FollowerShipDAO(followerUser.getIndex(), followUser.getIndex());
+        FollowerShipDAO followerShipDAO = new FollowerShipDAO(followerUser, followUser);
         followerShipRepository.save(followerShipDAO);
         return"";
     }
-
-    @GetMapping("followership")
-    public List<FollowerShipDAO> get_follower(@RequestBody String myID){
+    @GetMapping("followership/{ID}/follow")
+    public List<FollowerShipDAO> get_following(@PathVariable("ID") String myID){
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
         List<FollowerShipDAO> followerShipDAOS = followerShipRepository
-                .findAllByFollowUserIndex(usersDAO.getIndex());
+                .findByFollowerUser(usersDAO);
+
+
+        return followerShipDAOS;
+    }
+
+    @GetMapping("followership/{ID}/follower")
+    public List<FollowerShipDAO> get_follower(@PathVariable("ID") String myID){
+        List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
+        UsersDAO usersDAO = usersDAOList.get(0);
+        List<FollowerShipDAO> followerShipDAOS = followerShipRepository
+                .findByFollowUser(usersDAO);
 
 
         return followerShipDAOS;

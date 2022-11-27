@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class UsersDAO {
     @Id
-    @JoinColumn(name = "user_index")
+    @Column(name = "userIndex")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long index;
     @Column(nullable = false)

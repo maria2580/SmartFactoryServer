@@ -14,14 +14,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class AlarmDAO extends BaseTimeEntity {
     @Id
+    @Column(name="alarmIndex")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long index; // 알람 구분 인덱스
     @ManyToOne(fetch = FetchType.LAZY) // 1
-    @JoinColumn(name = "user_index")//외래키 이름 지정
-    private UsersDAO userIndex;
+    @JoinColumn(name = "user")//외래키 이름 지정
+    private UsersDAO user;
     @ManyToOne(fetch = FetchType.LAZY) // 1
-    @JoinColumn(name = "sensor_index")//외래키 이름 지정
-    private SensorDAO sensorIndex; // 센서 고유 인덱스
+    @JoinColumn(name = "sensor")//외래키 이름 지정
+    private SensorDAO sensor; // 센서 고유 인덱스
     // on/off알람일경우 ?
     @Column(columnDefinition = "DOUBLE", nullable = false)
     private double minimum; // 알람 최저 기준치
@@ -36,9 +37,9 @@ public class AlarmDAO extends BaseTimeEntity {
     }
 
     @Builder
-    public AlarmDAO(UsersDAO usersDAO, SensorDAO sensorIndex , double minimum, double maximum) {
-        this.userIndex = usersDAO;//새 값 추가할 때는 userID로 index 구해서 매개변수로 삽입하기.
-        this.sensorIndex = sensorIndex;
+    public AlarmDAO(UsersDAO usersDAO, SensorDAO sensor, double minimum, double maximum) {
+        this.user = usersDAO;//새 값 추가할 때는 userID로 index 구해서 매개변수로 삽입하기.
+        this.sensor = sensor;
         this.minimum = minimum;
         this.maximum = maximum;
 

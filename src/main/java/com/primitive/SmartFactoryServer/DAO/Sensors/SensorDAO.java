@@ -1,5 +1,6 @@
 package com.primitive.SmartFactoryServer.DAO.Sensors;
 
+import com.primitive.SmartFactoryServer.DAO.users.UsersDAO;
 import com.primitive.SmartFactoryServer.DTO.Sensor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +13,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class SensorDAO {
     @Id
-    @JoinColumn(name = "sensor_index")//외래키 이름 지정
+    @Column(name = "sensorIndex")//외래키 이름 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long index;
-    @Column(nullable = false)
-    private Long userIndex;
+    @ManyToOne
+    @JoinColumn(name="userIndex")
+    private UsersDAO user;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -26,8 +28,8 @@ public class SensorDAO {
         this.command= sensor.getCommand();
     }
     @Builder
-    public SensorDAO(Long userIndex,String name, String command) {
-        this.userIndex=userIndex;
+    public SensorDAO(UsersDAO user, String name, String command) {
+        this.user = user;
         this.name = name;
         this.command = command;
     }

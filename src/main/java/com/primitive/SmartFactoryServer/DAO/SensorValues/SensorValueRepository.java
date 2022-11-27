@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface SensorValueRepository extends JpaRepository<SensorValueDAO,Long> {
-    List<SensorValueDAO> findAllByUser(UsersDAO usersDAO);
+    List<SensorValueDAO> findByUser(UsersDAO usersDAO);
+
 }
