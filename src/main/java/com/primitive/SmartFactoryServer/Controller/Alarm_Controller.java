@@ -10,10 +10,11 @@ import com.primitive.SmartFactoryServer.DTO.AlarmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("alarm")
+@RequestMapping("")
 public class Alarm_Controller {
     @Autowired
     UsersRepository usersRepository;
@@ -27,22 +28,33 @@ public class Alarm_Controller {
         UsersDAO usersDAO = usersDAOList.get(0);
         SensorDAO sensorDAO = sensorRepository.findById(alarmDTO.getSensorIndex()).get();
         AlarmDAO alarmDAO = new AlarmDAO(usersDAO, sensorDAO,alarmDTO.getMinimum(), alarmDTO.getMaximum());
+        System.out.println("Alarm_Controller.post_alarm: alarm DAO: "+alarmDAO);
+        alarmRepository.save(alarmDAO);
         return "";
     }
 
     @GetMapping("alarm/{ID}")//알람리스트 호출
-    public List<AlarmDAO> get_alarm(@PathVariable("ID")String myID){
+    public List<AlarmDTO> get_alarm(@PathVariable("ID")String myID){
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
         List<AlarmDAO> alarmDAOS = alarmRepository.findByUser(usersDAO);
-        return alarmDAOS;
+        List<AlarmDTO> resultAlarmDTOS=new ArrayList<>();
+        for (int i = 0; i < alarmDAOS.size(); i++) {
+            AlarmDAO alarm = alarmDAOS.get(i);
+            resultAlarmDTOS.add(new AlarmDTO(alarm.getIndex(),alarm.getSensor().getIndex(),alarm.getMinimum(),alarm.getMaximum(),alarm.getCreatedDate(),alarm.getModifiedDate()));
+        }
+        return resultAlarmDTOS;
     }
 
     @PatchMapping("alarm")//센서 알람 기준치 설정
     public String patch_from_alarm(@RequestBody AlarmDTO alarmDTO){
         AlarmDAO alarmDAO = alarmRepository.findById(alarmDTO.getIndex()).get();
+        System.out.println("기존 알람 DAO: "+alarmDAO);
         alarmDAO.updateMinimum(alarmDTO.getMinimum());
         alarmDAO.updateMaximum(alarmDTO.getMaximum());
+        System.out.println("Patch 이후 알람 DAO: "+alarmDAO);
+
+
 
         alarmRepository.save(alarmDAO);
 
@@ -51,8 +63,8 @@ public class Alarm_Controller {
 
     @DeleteMapping("alarm/{index}")//알람 항목 삭제
     public String delete_alarm(@PathVariable("index") Long alarmIndex){
-        SensorDAO sensorDAO = sensorRepository.findById(alarmIndex).get();
-        sensorRepository.delete(sensorDAO);
+        AlarmDAO alarmDAO = alarmRepository.findById(alarmIndex).get();
+        alarmRepository.delete(alarmDAO);
 
         return "";
     }

@@ -19,10 +19,14 @@ public class UsersDAO {
     String pw;
     String factoryToken;
     String clientToken;
+    String pushToken;
 
     public UsersDAO(String id, String PW) {
         this.userId = id;
         this.pw = PW;
+    }
+    public void updatePushToken(String pushToken){
+        this.pushToken=pushToken;
     }
 
     public void updateFactoryToken(String factoryToken){

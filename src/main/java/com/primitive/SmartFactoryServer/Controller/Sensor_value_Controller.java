@@ -27,7 +27,7 @@ public class Sensor_value_Controller {
         String sensorValuesString="";
 
         for(int i = 0 ; i< sensorValueDTO.getSensorValues().length;i++){
-            System.out.println("받은 값:"+sensorValueDTO.getSensorValues()[i]);
+            System.out.println(sensorValueDTO.getID()+" 에게서 받은 값:"+sensorValueDTO.getSensorValues()[i]);
         }
         UsersDAO findedUser= usersRepository.findByUserId(sensorValueDTO.getID()).get(0);
         SensorValueDAO sensorValue= new SensorValueDAO(findedUser,sensorValueDTO.valueToString());
@@ -38,19 +38,28 @@ public class Sensor_value_Controller {
 
     @GetMapping("sensors_value/{ID}/resent_one")
     public SensorValue[] get_sensor_value_resent_one(@PathVariable("ID") String ID) {
-        List<SensorValueDAO> sensorValueDAOList= sensorValueRepository.findByUser(usersRepository.findByUserId(ID).get(0));
-        int lastIndex=sensorValueDAOList.size()-1;
+        List<SensorValueDAO> sensorValueDAOList= sensorValueRepository.findByUser(usersRepository.findByUserId(ID).get(0));//유저를 통해 찾고
         SensorValue[] result = new SensorValue[0];
-        JSONArray jsonArrays=new JSONArray();
-        try {
-            jsonArrays=new JSONArray(sensorValueDAOList.get(lastIndex).getSensorValues());
-            result=new SensorValue[jsonArrays.length()];
-            for(int i=0;i<jsonArrays.length();i++){
-                JSONObject jsonObject= new JSONObject(jsonArrays.get(i).toString());
-                result[i]=new SensorValue(jsonObject.getString("name"), jsonObject.getString("value")) ;
-            }
-        }catch (Exception e){e.printStackTrace();}
+        if (!Objects.isNull(sensorValueDAOList)) {
+            int lastIndex = sensorValueDAOList.size() - 1;
+            JSONArray jsonArrays = null;
+            try {
+                //현재 Sensorvalue[]가 [값:{센서값s},값:{센서값s}, 값:{센서값s}]이므로
+                // 가장 마지막(최근)의 값:{센서값s}쌍의 값인 센서값s가 JsonArray로 만들어짐.
+                jsonArrays = new JSONArray(sensorValueDAOList.get(lastIndex).getSensorValues());
+                result = new SensorValue[jsonArrays.length()];
+                for (int i = 0; i < jsonArrays.length(); i++) {
+                    //센서값s에서 센서값을 하나하나 꺼내서 result객체에 집어넣음
+                    JSONObject jsonObject = new JSONObject(jsonArrays.get(i).toString());
+                    result[i] = new SensorValue(jsonObject.getString("name"), jsonObject.getString("value"));
+                }
 
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return result;
     }
     @GetMapping("sensors_value/{ID}")
