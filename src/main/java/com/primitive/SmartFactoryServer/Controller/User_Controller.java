@@ -9,11 +9,12 @@ import com.primitive.SmartFactoryServer.VO.SignUpVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("")
-public class Login_Controller {
+public class User_Controller {
 
     @Autowired
     UsersRepository usersRepository;
@@ -62,6 +63,19 @@ public class Login_Controller {
             return LoginStatus.DENIED+"";
         }
     }
+    @GetMapping("User_list/{partOfID}")
+    public List<String> get_list_of_user_by(@PathVariable("partOfID")String partOfID){
+        List<UsersDAO> usersDAOList=usersRepository.findAll();
+        List<String> result=new ArrayList<>();
+        for (UsersDAO user:usersDAOList) {
+            if(user.getUserId().contains(partOfID)){
+                result.add(user.getUserId());
+            }
+        }
+        return result;
+    }
+
+
 }
 class LoginStatus{
     public static final int PERMITTED=0;
