@@ -74,6 +74,12 @@ public class User_Controller {
         }
         return result;
     }
+    @GetMapping("user/{index}")
+    public String get_userID_of_by_index(@PathVariable("index")long index){
+        UsersDAO usersDAOt=usersRepository.findById(index).get();
+        return usersDAOt.getUserId();
+    }
+
 
 
 }

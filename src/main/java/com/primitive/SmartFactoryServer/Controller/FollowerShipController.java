@@ -5,10 +5,12 @@ import com.primitive.SmartFactoryServer.DAO.FollowerShips.FollowerShipRepository
 import com.primitive.SmartFactoryServer.DAO.SensorValues.SensorValueRepository;
 import com.primitive.SmartFactoryServer.DAO.users.UsersDAO;
 import com.primitive.SmartFactoryServer.DAO.users.UsersRepository;
+import com.primitive.SmartFactoryServer.DTO.FollowerShipDTO;
 import com.primitive.SmartFactoryServer.VO.FollowshipVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,6 +37,10 @@ public class FollowerShipController {
         UsersDAO usersDAO = usersDAOList.get(0);
         List<FollowerShipDAO> followerShipDAOS = followerShipRepository
                 .findByFollowerUser(usersDAO);//내가 팔로우 하는 행 의 리스트
+        List<FollowerShipDTO> followDTOList = new ArrayList<>();
+        for (FollowerShipDAO fdao : followerShipDAOS) {
+            followDTOList.add(new FollowerShipDTO(fdao.getIndex(),fdao.getFollowerUser().getIndex(),fdao.getFollowUser().getIndex(),fdao.isEnable(),fdao.getCreatedDate(),fdao.getModifiedDate()));
+        }
 
 
         return followerShipDAOS;
@@ -46,7 +52,10 @@ public class FollowerShipController {
         UsersDAO usersDAO = usersDAOList.get(0);
         List<FollowerShipDAO> followerShipDAOS = followerShipRepository
                 .findByFollowUser(usersDAO);//내가 팔로우당하는 행의 리스트
-
+        List<FollowerShipDTO> followerDTOList = new ArrayList<>();
+        for (FollowerShipDAO fdao : followerShipDAOS) {
+            followerDTOList.add(new FollowerShipDTO(fdao.getIndex(),fdao.getFollowerUser().getIndex(),fdao.getFollowUser().getIndex(),fdao.isEnable(),fdao.getCreatedDate(),fdao.getModifiedDate()));
+        }
 
         return followerShipDAOS;
     }
