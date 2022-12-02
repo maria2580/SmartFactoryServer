@@ -34,7 +34,7 @@ public class FollowerShipController {
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
         List<FollowerShipDAO> followerShipDAOS = followerShipRepository
-                .findByFollowerUser(usersDAO);
+                .findByFollowerUser(usersDAO);//내가 팔로우 하는 행 의 리스트
 
 
         return followerShipDAOS;
@@ -45,7 +45,7 @@ public class FollowerShipController {
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
         List<FollowerShipDAO> followerShipDAOS = followerShipRepository
-                .findByFollowUser(usersDAO);
+                .findByFollowUser(usersDAO);//내가 팔로우당하는 행의 리스트
 
 
         return followerShipDAOS;
@@ -60,6 +60,12 @@ public class FollowerShipController {
             followerShipDAO.followDisable();
             followerShipRepository.save(followerShipDAO);
         }
+        return "";
+    }
+    @DeleteMapping("followership/{ID}")
+    public String delete_follower(@PathVariable("ID") Long followerShipIndex){
+        FollowerShipDAO followerShipDAO = followerShipRepository.findById(followerShipIndex).get();
+        followerShipRepository.delete(followerShipDAO);
         return "";
     }
 }
