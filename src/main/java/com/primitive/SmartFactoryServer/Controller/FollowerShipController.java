@@ -32,7 +32,7 @@ public class FollowerShipController {
         return"";
     }
     @GetMapping("followership/{ID}/follow")
-    public List<FollowerShipDAO> get_following(@PathVariable("ID") String myID){
+    public List<FollowerShipDTO> get_following(@PathVariable("ID") String myID){
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
         List<FollowerShipDAO> followerShipDAOS = followerShipRepository
@@ -43,11 +43,11 @@ public class FollowerShipController {
         }
 
 
-        return followerShipDAOS;
+        return followDTOList;
     }
 
     @GetMapping("followership/{ID}/follower")
-    public List<FollowerShipDAO> get_follower(@PathVariable("ID") String myID){
+    public List<FollowerShipDTO> get_follower(@PathVariable("ID") String myID){
         List<UsersDAO> usersDAOList = usersRepository.findByUserId(myID);
         UsersDAO usersDAO = usersDAOList.get(0);
         List<FollowerShipDAO> followerShipDAOS = followerShipRepository
@@ -57,7 +57,7 @@ public class FollowerShipController {
             followerDTOList.add(new FollowerShipDTO(fdao.getIndex(),fdao.getFollowerUser().getIndex(),fdao.getFollowUser().getIndex(),fdao.isEnable(),fdao.getCreatedDate(),fdao.getModifiedDate()));
         }
 
-        return followerShipDAOS;
+        return followerDTOList;
     }
     @PatchMapping("followership")
     public String patch_follower(@RequestBody Long followerShipIndex,@RequestParam(value = "enable") boolean enable){
