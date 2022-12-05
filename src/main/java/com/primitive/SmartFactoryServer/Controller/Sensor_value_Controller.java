@@ -46,12 +46,14 @@ public class Sensor_value_Controller {
             try {
                 //현재 Sensorvalue[]가 [값:{센서값s},값:{센서값s}, 값:{센서값s}]이므로
                 // 가장 마지막(최근)의 값:{센서값s}쌍의 값인 센서값s가 JsonArray로 만들어짐.
-                jsonArrays = new JSONArray(sensorValueDAOList.get(lastIndex).getSensorValues());
-                result = new SensorValue[jsonArrays.length()];
-                for (int i = 0; i < jsonArrays.length(); i++) {
-                    //센서값s에서 센서값을 하나하나 꺼내서 result객체에 집어넣음
-                    JSONObject jsonObject = new JSONObject(jsonArrays.get(i).toString());
-                    result[i] = new SensorValue(jsonObject.getString("name"), jsonObject.getString("value"));
+                if (!sensorValueDAOList.isEmpty()) {
+                    jsonArrays = new JSONArray(sensorValueDAOList.get(lastIndex).getSensorValues());
+                    result = new SensorValue[jsonArrays.length()];
+                    for (int i = 0; i < jsonArrays.length(); i++) {
+                        //센서값s에서 센서값을 하나하나 꺼내서 result객체에 집어넣음
+                        JSONObject jsonObject = new JSONObject(jsonArrays.get(i).toString());
+                        result[i] = new SensorValue(jsonObject.getString("name"), jsonObject.getString("value"));
+                    }
                 }
 
 

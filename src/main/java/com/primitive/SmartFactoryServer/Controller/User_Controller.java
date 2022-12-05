@@ -48,11 +48,9 @@ public class User_Controller {
         }//flag가 true라면 존재하는 유저1
         if(flag&&usersDAOList.get(0).getPw().equals(idpw.PW)){
             if(idpw.env==Env.FACTORY){
-                usersDAOList.get(0).updateFactoryToken(LoginStatus.PERMITTED+"");
                 return LoginStatus.PERMITTED+"";
 
             } else if (idpw.env==Env.CLIENT) {
-                usersDAOList.get(0).updateClientToken(LoginStatus.PERMITTED+"");
                 return LoginStatus.PERMITTED+"";
             }
             else {

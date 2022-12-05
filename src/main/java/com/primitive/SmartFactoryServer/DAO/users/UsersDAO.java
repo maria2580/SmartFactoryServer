@@ -17,8 +17,6 @@ public class UsersDAO {
     String userId;
     @Column(nullable = false)
     String pw;
-    String factoryToken;
-    String clientToken;
     String pushToken;
 
     public UsersDAO(String id, String PW) {
@@ -29,16 +27,4 @@ public class UsersDAO {
         this.pushToken=pushToken;
     }
 
-    public void updateFactoryToken(String factoryToken){
-        this.factoryToken=factoryToken;
-    }
-    public void updateClientToken(String clientToken){
-        this.clientToken=clientToken;
-    }
-    public boolean clientTokenCheck(String clientToken){
-        return this.clientToken.equals(clientToken);
-    }
-    public boolean factoryTokenCheck(String factoryToken){
-        return this.factoryToken.equals(factoryToken);
-    }
 }

@@ -25,7 +25,7 @@ public class Test_Controller {
 
     int init=0;
 
-    @GetMapping("board/{index}")
+    @GetMapping("observer/{index}")
     public String testController(@PathVariable String index){
         if(index.equals("0")){
             if (init==0){

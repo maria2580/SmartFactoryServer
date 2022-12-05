@@ -12,7 +12,6 @@ import lombok.ToString;
 public class SensorValueDTO {
     private SensorValue[] sensorValues;
     private String ID;
-    private String loginToken;
 
     public String valueToString() {
         String s="";

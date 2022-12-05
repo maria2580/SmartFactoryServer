@@ -40,9 +40,8 @@ public class FollowerShipController {
         List<FollowerShipDTO> followDTOList = new ArrayList<>();
         for (FollowerShipDAO fdao : followerShipDAOS) {
             followDTOList.add(new FollowerShipDTO(fdao.getIndex(),fdao.getFollowerUser().getIndex(),fdao.getFollowUser().getIndex(),fdao.isEnable(),fdao.getCreatedDate(),fdao.getModifiedDate()));
+            System.out.println("followership/{ID}/follow"+fdao.getFollowerUser().getIndex()+"   ->    "+fdao.getFollowUser().getIndex());
         }
-
-
         return followDTOList;
     }
 
@@ -55,12 +54,12 @@ public class FollowerShipController {
         List<FollowerShipDTO> followerDTOList = new ArrayList<>();
         for (FollowerShipDAO fdao : followerShipDAOS) {
             followerDTOList.add(new FollowerShipDTO(fdao.getIndex(),fdao.getFollowerUser().getIndex(),fdao.getFollowUser().getIndex(),fdao.isEnable(),fdao.getCreatedDate(),fdao.getModifiedDate()));
+            System.out.println("followership/{ID}/follower"+fdao.getFollowerUser().getIndex()+"   ->    "+fdao.getFollowUser().getIndex());
         }
-
         return followerDTOList;
     }
-    @PatchMapping("followership")
-    public String patch_follower(@RequestBody Long followerShipIndex,@RequestParam(value = "enable") boolean enable){
+    @PatchMapping("followership/{index}")
+    public String patch_follower(@PathVariable("index") Long followerShipIndex,@RequestParam(value = "enable") boolean enable){
         FollowerShipDAO followerShipDAO = followerShipRepository.findById(followerShipIndex).get();
         if(enable){
             followerShipDAO.followAccept();

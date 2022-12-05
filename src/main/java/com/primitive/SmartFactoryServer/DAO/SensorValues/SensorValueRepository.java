@@ -1,5 +1,6 @@
 package com.primitive.SmartFactoryServer.DAO.SensorValues;
 
+import com.primitive.SmartFactoryServer.DAO.Sensors.SensorDAO;
 import com.primitive.SmartFactoryServer.DAO.users.UsersDAO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

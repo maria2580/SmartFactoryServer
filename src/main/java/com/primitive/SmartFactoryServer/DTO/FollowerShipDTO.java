@@ -1,10 +1,12 @@
 package com.primitive.SmartFactoryServer.DTO;
 
 import lombok.Builder;
+import lombok.Getter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+@Getter
 public class FollowerShipDTO{
     private Long index;
     private Long followerUserIndex;
