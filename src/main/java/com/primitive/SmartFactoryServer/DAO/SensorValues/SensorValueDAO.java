@@ -19,8 +19,8 @@ public class SensorValueDAO extends BaseTimeEntity {
     @Column(name = "sensorValueIndex")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long index;
-    @ManyToOne(fetch = FetchType.LAZY) // 1
-    @JoinColumn(name = "userIndex")//외래키 이름 지정
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userIndex")
     private UsersDAO user;
     @Column(columnDefinition = "TEXT", nullable = false)
     private String sensorValues;

@@ -55,9 +55,6 @@ public class Sensor_value_Controller {
                         result[i] = new SensorValue(jsonObject.getString("name"), jsonObject.getString("value"));
                     }
                 }
-
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

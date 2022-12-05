@@ -20,12 +20,11 @@ public class AlarmDAO extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long index; // 알람 구분 인덱스
     @ManyToOne(fetch = FetchType.LAZY) // 1
-    @JoinColumn(name = "user")//외래키 이름 지정
+    @JoinColumn(name = "user")
     private UsersDAO user;
     @ManyToOne(fetch = FetchType.LAZY) // 1
-    @JoinColumn(name = "sensor")//외래키 이름 지정
+    @JoinColumn(name = "sensor")
     private SensorDAO sensor; // 센서 고유 인덱스
-    // on/off알람일경우 ?
     @Column(columnDefinition = "DOUBLE", nullable = false)
     private double minimum; // 알람 최저 기준치
     @Column(columnDefinition = "DOUBLE", nullable = false)

@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class SensorDAO {
     @Id
-    @Column(name = "sensorIndex")//외래키 이름 지정
+    @Column(name = "sensorIndex")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long index;
     @ManyToOne
