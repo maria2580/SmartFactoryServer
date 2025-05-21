@@ -227,6 +227,3 @@
 * `SensorValueDAO`의 `sensorValues` 필드는 `SensorValueDTO`의 `valueToString()` 메소드를 통해 생성된 JSON 문자열 형태로 여러 센서의 값을 한 번에 저장합니다. (예: `"[{\"name\":\"temp\", \"value\":\"25\"}, {\"name\":\"humid\", \"value\":\"60\"}]"`)
 * 데이터 조회 시(`Sensor_value_Controller`), 이 JSON 문자열을 다시 `org.json.JSONArray` 및 `org.json.JSONObject`를 사용하여 파싱하여 `SensorValue[]` 객체로 변환합니다.
 
----
-
-이 README가 Smart Factory Server 프로젝트를 이해하고 설정, 실행하는 데 도움이 되기를 바랍니다.
