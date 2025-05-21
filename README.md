@@ -7,14 +7,25 @@
 본 서버는 Spring Boot, Spring Data JPA, Firebase Admin SDK 등의 기술을 기반으로 구축되었습니다.
 
 ## 🏅 주요 성과
-<div>
-<div style="display: absolute" align="left"><image src="https://github.com/user-attachments/assets/61a08bdf-ebcb-4d5c-82b4-84b23467a586" width="400">
-      <p>AIoT 스마트 팩토리 시스템 연구를 위한 테스트베드 구축</p>
-   </div> 
-      <div style="display: absolute" align="right"><image src="https://github.com/user-attachments/assets/08b7f39e-1905-497b-a0a5-b4b10aea42be" width="400">
-      <p>2022 한국정보기술학회 대학생 논문 경진대회 동상 수상</p>
-   </div> 
-</div>
+<table align="center">
+      <tr>
+            <td align="center">
+                  <image src="https://github.com/user-attachments/assets/61a08bdf-ebcb-4d5c-82b4-84b23467a586" width="400">
+            </td>
+            <td align="center">
+                  <image src="https://github.com/user-attachments/assets/08b7f39e-1905-497b-a0a5-b4b10aea42be" width="400">
+            </td>
+      </tr>
+      <tr>
+            <td align="center">
+                  AIoT 스마트 팩토리 시스템 연구를 위한 테스트베드 구축
+            </td>
+            <td align="center">
+                  2022 한국정보기술학회 대학생 논문 경진대회 동상 수상
+            </td>
+      </tr>
+</table>
+
 ## ✨ 주요 기능
 
 * **사용자 관리:**
