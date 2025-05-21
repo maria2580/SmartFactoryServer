@@ -7,7 +7,7 @@
 본 서버는 Spring Boot, Spring Data JPA, Firebase Admin SDK 등의 기술을 기반으로 구축되었습니다.
 
 ## 🏅 주요 성과
-<div>
+<div style="display: inline-block;">
 <div align="center"><image src="https://github.com/user-attachments/assets/61a08bdf-ebcb-4d5c-82b4-84b23467a586" width="400">
       <p>AIoT 스마트 팩토리 시스템 연구를 위한 테스트베드 구축</p>
    </div> 
