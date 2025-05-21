@@ -6,6 +6,14 @@
 
 본 서버는 Spring Boot, Spring Data JPA, Firebase Admin SDK 등의 기술을 기반으로 구축되었습니다.
 
+## 🏅 주요 성과
+<div align="center"><image src="https://github.com/user-attachments/assets/08b7f39e-1905-497b-a0a5-b4b10aea42be" width="400">
+      <p>2022 한국정보기술학회 대학생 논문 경진대회 동상 수상</p>
+   </div> 
+
+
+
+
 ## ✨ 주요 기능
 
 * **사용자 관리:**
