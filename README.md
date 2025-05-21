@@ -8,10 +8,10 @@
 
 ## 🏅 주요 성과
 <div style="display: inline-block;">
-<div align="center"><image src="https://github.com/user-attachments/assets/61a08bdf-ebcb-4d5c-82b4-84b23467a586" width="400">
+<div align=""><image src="https://github.com/user-attachments/assets/61a08bdf-ebcb-4d5c-82b4-84b23467a586" width="400">
       <p>AIoT 스마트 팩토리 시스템 연구를 위한 테스트베드 구축</p>
    </div> 
-      <div align="center"><image src="https://github.com/user-attachments/assets/08b7f39e-1905-497b-a0a5-b4b10aea42be" width="400">
+      <div align=""><image src="https://github.com/user-attachments/assets/08b7f39e-1905-497b-a0a5-b4b10aea42be" width="400">
       <p>2022 한국정보기술학회 대학생 논문 경진대회 동상 수상</p>
    </div> 
 </div>
